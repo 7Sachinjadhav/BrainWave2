@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leaderboard | Brain Wave</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white font-sans">
+  <header class="text-center py-6 bg-purple-700">
+    <h1 class="text-3xl font-bold">📊 Brain Wave Leaderboard</h1>
+    <p class="mt-2 text-lg">Live Round 1 Scores</p>
+  </header>
+
+  <main class="p-6 max-w-4xl mx-auto">
+    <table class="w-full text-left bg-gray-800 rounded overflow-hidden shadow-lg">
+      <thead class="bg-gray-700 text-white">
+        <tr>
+          <th class="p-3">Team Name</th>
+          <th class="p-3">Score</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboardData" class="text-gray-300"></tbody>
+    </table>
+  </main>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3n0_IA5j8rof7-zYqTHAgwhuqLQ61xL8",
+      authDomain: "brainwave-337b3.firebaseapp.com",
+      databaseURL: "https://brainwave-337b3-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "brainwave-337b3",
+      storageBucket: "brainwave-337b3.appspot.com",
+      messagingSenderId: "18955419464",
+      appId: "1:18955419464:web:5fe45bd80e1674703b7d7d"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const leaderboardBody = document.getElementById("leaderboardData");
+
+    // Listen to changes in "teams"
+    db.ref("teams").on("value", snapshot => {
+      const teams = [];
+      snapshot.forEach(teamSnap => {
+        const team = teamSnap.val();
+        if(team.round === 1){ // Only show Round 1 scores
+          teams.push(team);
+        }
+      });
+
+      // Sort by score descending
+      teams.sort((a, b) => b.score - a.score);
+
+      leaderboardBody.innerHTML = "";
+      teams.forEach((team, idx) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="p-3">${team.name}</td>
+          <td class="p-3">${team.score}/10</td>
+        `;
+        leaderboardBody.appendChild(row);
+      });
+    });
+  </script>
+</body>
+</html>

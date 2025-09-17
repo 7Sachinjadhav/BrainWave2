@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel | Brain Wave</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white font-sans">
+  <header class="text-center py-6 bg-purple-700">
+    <h1 class="text-3xl font-bold">🛠️ Admin Panel</h1>
+    <p class="mt-2 text-lg">Control round status</p>
+  </header>
+
+  <main class="p-6 max-w-xl mx-auto space-y-6">
+    <div class="bg-gray-800 p-4 rounded space-y-4">
+      <h2 class="text-xl font-semibold">Manage Rounds</h2>
+      
+      <div class="space-x-2">
+        <button onclick="setRound('round1', 'open')" class="bg-green-600 px-4 py-2 rounded">Unlock Round 1</button>
+        <button onclick="setRound('round1', 'locked')" class="bg-red-600 px-4 py-2 rounded">Lock Round 1</button>
+      </div>
+
+      <div class="space-x-2">
+        <button onclick="setRound('round2', 'open')" class="bg-green-600 px-4 py-2 rounded">Unlock Round 2</button>
+        <button onclick="setRound('round2', 'locked')" class="bg-red-600 px-4 py-2 rounded">Lock Round 2</button>
+      </div>
+
+      <div class="space-x-2">
+        <button onclick="setRound('round3', 'open')" class="bg-green-600 px-4 py-2 rounded">Unlock Round 3</button>
+        <button onclick="setRound('round3', 'locked')" class="bg-red-600 px-4 py-2 rounded">Lock Round 3</button>
+      </div>
+
+      <div class="space-x-2">
+        <button onclick="setRound('round4', 'open')" class="bg-green-600 px-4 py-2 rounded">Unlock Round 4</button>
+        <button onclick="setRound('round4', 'locked')" class="bg-red-600 px-4 py-2 rounded">Lock Round 4</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3n0_IA5j8rof7-zYqTHAgwhuqLQ61xL8",
+      authDomain: "brainwave-337b3.firebaseapp.com",
+      databaseURL: "https://brainwave-337b3-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "brainwave-337b3",
+      storageBucket: "brainwave-337b3.appspot.com",
+      messagingSenderId: "18955419464",
+      appId: "1:18955419464:web:5fe45bd80e1674703b7d7d"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function setRound(round, status) {
+      db.ref("rounds/" + round).set({ status: status });
+      alert(`${round.toUpperCase()} is now ${status.toUpperCase()}!`);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Round 2: Debugging</title>
+</head>
+<body style="background-color:#111; color:white; font-family:sans-serif; text-align:center; padding:50px;">
+  <h1>🐞 Round 2: Debugging</h1>
+  <p>Fix the bugs in the following code snippets:</p>
+
+  <div style="text-align:left; max-width:600px; margin:20px auto;">
+    <p><strong>Q1:</strong> Identify and fix the error:<br>
+    <code>for i in range(5) print(i)</code></p>
+
+    <p><strong>Q2:</strong> Why does this code throw an error?<br>
+    <code>my_dict = {"a": 1, "b": 2}<br>print(my_dict["c"])</code></p>
+  </div>
+
+  <button onclick="submitDebug()" style="margin-top:20px; padding:10px 20px; background-color:#2196F3; color:white; border:none; border-radius:5px;">Submit</button>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3n0_IA5j8rof7-zYqTHAgwhuqLQ61xL8",
+      authDomain: "brainwave-337b3.firebaseapp.com",
+      databaseURL: "https://brainwave-337b3-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "brainwave-337b3",
+      storageBucket: "brainwave-337b3.appspot.com",
+      messagingSenderId: "18955419464",
+      appId: "1:18955419464:web:5fe45bd80e1674703b7d7d"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function submitDebug() {
+      const teamName = localStorage.getItem("teamName") || "Anonymous";
+      const score = 2;
+      const round = 2;
+
+      db.ref("teams/" + teamName).set({
+        name: teamName,
+        score: score,
+        round: round
+      });
+
+      localStorage.setItem("quizScore", score);
+      localStorage.setItem("roundCompleted", round);
+      window.location.href = "waiting3.html";
+    }
+  </script>
+</body>
+</html>

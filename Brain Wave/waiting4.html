@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4th Round: Final Challenge | Brain Wave</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center h-screen">
+  <div class="text-center max-w-xl px-6">
+    <h1 class="text-4xl font-bold mb-4">🏁 4th Round: Final Challenge</h1>
+    <h2 class="text-2xl font-semibold mb-2">
+      Welcome, <span id="teamNameDisplay" class="text-yellow-400"></span>
+    </h2>
+    <p class="text-lg mb-6 text-red-400 font-semibold">
+      ⚠️ Only top teams will advance to the final round. Please wait for the admin to unlock it.
+    </p>
+    <p class="text-md text-gray-300">
+      🏆 This round will test everything you've learned. Expect a complex, multi-step problem that requires creativity, precision, and teamwork.
+    </p>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    document.getElementById("teamNameDisplay").textContent =
+      localStorage.getItem("teamName") || "Team";
+
+    // ✅ Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3n0_IA5j8rof7-zYqTHAgwhuqLQ61xL8",
+      authDomain: "brainwave-337b3.firebaseapp.com",
+      databaseURL: "https://brainwave-337b3-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "brainwave-337b3",
+      storageBucket: "brainwave-337b3.appspot.com",
+      messagingSenderId: "18955419464",
+      appId: "1:18955419464:web:5fe45bd80e1674703b7d7d"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 🔑 Listen for Round 4 unlock
+    db.ref("rounds").on("value", snapshot => {
+      const rounds = snapshot.val();
+      if (!rounds) return;
+
+      if (rounds.round4?.status === "open") {
+        localStorage.setItem("round", "4");
+        window.location.href = "round4-final.html"; // ✅ redirect to final challenge
+      }
+    });
+  </script>
+</body>
+</html>

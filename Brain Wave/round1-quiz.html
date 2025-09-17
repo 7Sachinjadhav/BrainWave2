@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Round 1: MCQ Quiz</title>
+  <style>
+    body { background-color:#111; color:white; font-family:sans-serif; text-align:center; padding:50px; }
+    .question { margin: 20px 0; font-size: 20px; }
+    .options button { display: block; margin: 10px auto; padding:10px 20px; font-size:16px; border-radius:5px; cursor:pointer; }
+    #timer { font-size:18px; margin-top:20px; color:#FFEB3B; }
+  </style>
+</head>
+<body>
+  <h1>🧩 Round 1: MCQ Quiz</h1>
+  <div id="quizContainer">
+    <div class="question" id="questionText"></div>
+    <div class="options" id="optionsContainer"></div>
+    <div id="timer"></div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3n0_IA5j8rof7-zYqTHAgwhuqLQ61xL8",
+      authDomain: "brainwave-337b3.firebaseapp.com",
+      databaseURL: "https://brainwave-337b3-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "brainwave-337b3",
+      storageBucket: "brainwave-337b3.appspot.com",
+      messagingSenderId: "18955419464",
+      appId: "1:18955419464:web:5fe45bd80e1674703b7d7d"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const teamName = localStorage.getItem("teamName") || "Anonymous";
+
+    // MCQ Questions
+    const questions = [
+      { q:"What is the output of: 2 + 3 * 4?", options:["20","14","24","None"], answer:1 },
+      { q:"Which keyword is used for function in Python?", options:["fun","def","function","define"], answer:1 },
+      { q:"Which data type is immutable?", options:["List","Set","Tuple","Dictionary"], answer:2 },
+      { q:"What does HTML stand for?", options:["Hyperlinks Text Markup Language","Hyper Text Markup Language","High Text Mark Language","None"], answer:1 },
+      { q:"Which operator is used for comparison?", options:["=","==","!=","<>"], answer:1 },
+      { q:"What is the value of 10 % 3?", options:["1","2","3","0"], answer:1 },
+      { q:"Which CSS property changes text color?", options:["font-color","color","text-color","fgcolor"], answer:1 },
+      { q:"Inside which HTML element do we put JavaScript?", options:["<js>","<javascript>","<script>","<code>"], answer:2 },
+      { q:"Which Python loop runs a fixed number of times?", options:["while","for","loop","repeat"], answer:1 },
+      { q:"What is the output of: print(bool(''))?", options:["True","False","None","Error"], answer:1 }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let timerInterval;
+
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    const timerDisplay = document.getElementById("timer");
+
+    function startQuestion() {
+      if(currentQuestion >= questions.length){
+        submitQuiz();
+        return;
+      }
+
+      const q = questions[currentQuestion];
+      questionText.textContent = `Q${currentQuestion+1}: ${q.q}`;
+      optionsContainer.innerHTML = "";
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => selectOption(idx);
+        optionsContainer.appendChild(btn);
+      });
+
+      let timeLeft = 10;
+      timerDisplay.textContent = `Time left: ${timeLeft}s`;
+
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = `Time left: ${timeLeft}s`;
+        if(timeLeft <= 0){
+          clearInterval(timerInterval);
+          currentQuestion++;
+          startQuestion();
+        }
+      }, 1000);
+    }
+
+    function selectOption(selected){
+      const correct = questions[currentQuestion].answer;
+      if(selected === correct) score += 1;
+      clearInterval(timerInterval);
+      currentQuestion++;
+      startQuestion();
+    }
+
+    function submitQuiz(){
+      // Submit score to Firebase
+      db.ref("teams/" + teamName).set({
+        name: teamName,
+        score: score,
+        round: 1
+      });
+      localStorage.setItem("quizScore", score);
+      localStorage.setItem("roundCompleted", "1");
+
+      // Redirect to waiting page (no popup)
+      window.location.href = "waiting2.html";
+    }
+
+    startQuestion();
+  </script>
+</body>
+</html>

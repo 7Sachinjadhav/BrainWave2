@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Round 3: Code Optimization</title>
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    .question-box {
+      text-align: left;
+      max-width: 700px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #1e1e1e;
+      border-radius: 8px;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      margin-top: 10px;
+      background: #000;
+      color: #0f0;
+      border: 1px solid #444;
+      border-radius: 5px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚙️ Round 3: Code Optimization</h1>
+  <p>Optimize the following code snippets to make them more efficient:</p>
+
+  <div class="question-box">
+    <p><strong>Q1:</strong> The following code finds the sum of numbers from 1 to n. Optimize it:</p>
+    <pre>
+total = 0
+for i in range(1, n+1):
+    total += i
+print(total)
+    </pre>
+    <label for="answer1">Your Optimized Code:</label>
+    <textarea id="answer1" placeholder="Write your optimized solution here..."></textarea>
+  </div>
+
+  <div class="question-box">
+    <p><strong>Q2:</strong> The following code checks if a number is prime. Optimize it:</p>
+    <pre>
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, n):
+        if n % i == 0:
+            return False
+    return True
+    </pre>
+    <label for="answer2">Your Optimized Code:</label>
+    <textarea id="answer2" placeholder="Write your optimized solution here..."></textarea>
+  </div>
+
+  <button onclick="submitOptimization()">Submit</button>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3n0_IA5j8rof7-zYqTHAgwhuqLQ61xL8",
+      authDomain: "brainwave-337b3.firebaseapp.com",
+      databaseURL: "https://brainwave-337b3-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "brainwave-337b3",
+      storageBucket: "brainwave-337b3.appspot.com",
+      messagingSenderId: "18955419464",
+      appId: "1:18955419464:web:5fe45bd80e1674703b7d7d"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function submitOptimization() {
+      const teamName = localStorage.getItem("teamName") || "Anonymous";
+      const answer1 = document.getElementById("answer1").value;
+      const answer2 = document.getElementById("answer2").value;
+      const round = 3;
+
+      db.ref("teams/" + teamName + "/round3").set({
+        answer1: answer1,
+        answer2: answer2,
+        round: round
+      });
+
+      localStorage.setItem("roundCompleted", round);
+      alert("✅ Answers submitted successfully!");
+      window.location.href = "waiting4.html";
+    }
+  </script>
+</body>
+</html>
